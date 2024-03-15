@@ -6,16 +6,22 @@ agent any
 
         stage('Compile Stage'){
             steps{
-                withMaven('maven_3_9_4'){
-                    sh 'mvn clean compile'
+                script {
+                    def mvnHome = tool name: 'maven_3_9_5', type: 'maven'
+                    withEnv(["PATH+MAVEN=${mvnHome}/bin"]) {
+                        bat "${mvnHome}\\bin\\mvn clean compile"
+                    }
                 }
             }
         }
 
         stage('Test Stage'){
             steps{
-                withMaven('maven_3_9_4'){
-                    sh 'mvn clean verify -Dcucumber.filter.tags="@PRUEBA1"'
+                script {
+                    def mvnHome = tool name: 'maven_3_9_5', type: 'maven'
+                    withEnv(["PATH+MAVEN=${mvnHome}/bin"]) {
+                        bat "${mvnHome}\\bin\\mvn clean verify -Dcucumber.filter.tags=\"@PRUEBA1\""
+                    }
                 }
             }
         }
