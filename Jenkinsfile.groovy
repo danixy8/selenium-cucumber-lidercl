@@ -1,30 +1,24 @@
 pipeline{
 
 agent any
-
-    stages{
-
-        stage('Compile Stage'){
-            steps{
-                script {
-                    def mvnHome = tool name: 'maven_3_9_6', type: 'maven'
-                    withEnv(["PATH+MAVEN=${mvnHome}/bin"]) {
-                        bat "${mvnHome}\\bin\\mvn clean compile"
-                    }
-                }
+    tools {
+        // Especifica el nombre de la herramienta de Maven configurada en Jenkins
+        maven 'Maven 3.9.6'
+    }
+    stages {
+        stage('Compile') {
+            steps {
+                // Ejecuta las tareas de compilación con Maven
+                sh 'mvn clean compile'
             }
         }
-
-        stage('Test Stage'){
-            steps{
-                script {
-                    def mvnHome = tool name: 'maven_3_9_6', type: 'maven'
-                    withEnv(["PATH+MAVEN=${mvnHome}/bin"]) {
-                        bat "${mvnHome}\\bin\\mvn clean verify -Dcucumber.filter.tags=\"@PRUEBA1\""
-                    }
-                }
+        stage('Test') {
+            steps {
+                // Ejecuta las pruebas con Maven
+                sh 'mvn clean verify -Dcucumber.filter.tags="@PRUEBA1"'
             }
         }
+        // Otras etapas del pipeline
 
         stage('Cucumber Reports'){
             steps{
